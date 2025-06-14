@@ -1,0 +1,94 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  roles: [String!]!
+  registrationDate: DateTime!
+  state: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type UserWrapper {
+  user: User!
+}
+
+type UserGraphQL {
+  username: String!
+  password: String!
+  name: String!
+  email: String!
+  registrationDate: DateTime!
+  state: String!
+  roles: [String!]!
+}
+
+type UserDTO {
+  name: String!
+  username: String!
+  email: String!
+  roles: [String!]!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: UserDTO!
+}
+
+type Query {
+  findUsersByIds(userIds: [String!]!): [UserWrapper!]!
+  users: [User!]!
+  user(id: String!): User!
+  profile: UserGraphQL!
+  loginWithGoogle: String!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  registerUser(createUserInput: CreateUserInput!): User!
+  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
+  login(identifier: String!, password: String!): LoginResponse!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  username: String!
+  password: String!
+  roles: [Role!]!
+  registrationDate: DateTime
+  state: UserState! = ACTIVE
+}
+
+"""Roles disponibles para los usuarios"""
+enum Role {
+  USER
+  ORGANIZER
+  ADMIN
+}
+
+"""Estado del usuario"""
+enum UserState {
+  ACTIVE
+  INACTIVE
+  BANNED
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  username: String
+  password: String
+  roles: [Role!]
+  registrationDate: DateTime
+  state: UserState = ACTIVE
+}
