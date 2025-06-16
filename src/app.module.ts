@@ -4,7 +4,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -24,7 +23,6 @@ import { AuthModule } from './auth/auth.module';
         uri: configService.get<string>('MONGODB_CONNECTION_STRING'),
       }),
     }),
-    UsersModule,
     AuthModule,
   ],
 })
