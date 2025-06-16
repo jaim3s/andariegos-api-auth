@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Step 7: Expose the port the app runs on
-EXPOSE 4001
+EXPOSE 4002
 
 # Step 8: Define the command to run the application
 CMD ["sh", "-c", "npm run start:prod -- -p ${PORT}"]

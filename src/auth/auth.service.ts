@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     private readonly httpService: HttpService,
     private jwtService: JwtService,
-    @InjectModel(User.name) private userModel: Model<User>
+    @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
   generateJwt(user: any): string {
@@ -34,24 +34,21 @@ export class AuthService {
     const user = await this.findOneByUsernameOrEmail(identifier);
     console.log(user);
     if (!user) {
-      throw new UnauthorizedException("Credenciales inválidas");
+      throw new UnauthorizedException('Credenciales inválidas');
     }
     if (!(await bcrypt.compare(pass, user.password))) {
-      throw new UnauthorizedException("Contraseña incorrecta");
+      throw new UnauthorizedException('Contraseña incorrecta');
     }
-    
+
     const payload = {
       sub: user._id,
-      name: user.name,
-      username: user.username,
       roles: user.roles,
       email: user.email,
     };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
-      userId: user._id.toString()
+      userId: user._id.toString(),
     };
   }
-
 }
