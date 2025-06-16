@@ -10,6 +10,8 @@ import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './google.strategy';
 import { AuthController } from './auth.controller';
 import { HttpModule } from '@nestjs/axios';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { HttpModule } from '@nestjs/axios';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
   providers: [
