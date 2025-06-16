@@ -1,11 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
+import { CreateUserInput } from './dto/create-user.input';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +30,43 @@ export class AuthService {
     });
   }
 
+  async register(
+    createUserInput: CreateUserInput,
+  ): Promise<{ access_token: string }> {
+    const { email, username, password, roles, registrationDate } =
+      createUserInput;
+
+    if (await this.userModel.findOne({ email })) {
+      throw new BadRequestException('El email ya está registrado');
+    }
+
+    if (await this.userModel.findOne({ username })) {
+      throw new BadRequestException('El username ya está en uso');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new this.userModel({
+      email,
+      username,
+      password: hashedPassword,
+      roles: roles || ['USER'],
+      registrationDate: registrationDate || new Date(),
+    });
+
+    const savedUser = await newUser.save();
+
+    const payload = {
+      sub: savedUser._id,
+      email: savedUser.email,
+      roles: savedUser.roles,
+    };
+
+    const access_token = this.jwtService.sign(payload);
+
+    return { access_token };
+  }
+
   async signIn(
     identifier: string,
     pass: string,
@@ -42,6 +83,8 @@ export class AuthService {
 
     const payload = {
       sub: user._id,
+      name: user.name,
+      username: user.username,
       roles: user.roles,
       email: user.email,
     };

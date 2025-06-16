@@ -6,8 +6,6 @@ export type UserDocument = HydratedDocument<User> & {};
 
 @Schema({ collection: 'auth_users' })
 export class User {
-  @Prop({ required: true })
-  name: string;
 
   @Prop({ required: true, unique: true })
   email: string;
@@ -23,9 +21,6 @@ export class User {
 
   @Prop({ default: () => new Date() })
   registrationDate: Date;
-
-  @Prop({ default: 'active', enum: ['active', 'inactive', 'banned'] })
-  state: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

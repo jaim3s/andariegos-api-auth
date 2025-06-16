@@ -7,10 +7,35 @@ type LoginResponse {
   userId: String!
 }
 
+type RegisterResponse {
+  access_token: String!
+}
+
 type Query {
   loginWithGoogle: String!
 }
 
 type Mutation {
+  registerUser(createUserInput: CreateUserInput!): RegisterResponse!
   login(identifier: String!, password: String!): LoginResponse!
 }
+
+input CreateUserInput {
+  email: String!
+  username: String!
+  password: String!
+  roles: [Role!]!
+  registrationDate: DateTime
+}
+
+"""Roles disponibles para los usuarios"""
+enum Role {
+  USER
+  ORGANIZER
+  ADMIN
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
