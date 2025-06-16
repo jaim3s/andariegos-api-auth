@@ -20,6 +20,6 @@ export class LoginResponse {
   @Field()
   access_token: string;
 
-  @Field(() => UserDTO)
-  user: UserDTO;
+  @Field()
+  userId: string;
 }

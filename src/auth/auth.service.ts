@@ -19,7 +19,7 @@ export class AuthService {
   async signIn(
     identifier: string,
     pass: string,
-  ): Promise<{ access_token: string; user: any }> {
+  ): Promise<{ access_token: string; userId: string }> {
     console.log(identifier, pass);
     const response = await firstValueFrom(
     this.httpService.post('http://localhost:4002/graphql', {
@@ -59,13 +59,7 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
-      user: {
-        username: user.username,
-        name: user.name,
-        email: user.email,
-        roles: user.roles,
-        state: user.state,
-      },
+      userId: user._id
     };
   }
 

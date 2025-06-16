@@ -2,16 +2,9 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserDTO {
-  name: String!
-  username: String!
-  email: String!
-  roles: [String!]!
-}
-
 type LoginResponse {
   access_token: String!
-  user: UserDTO!
+  userId: String!
 }
 
 type Query {
