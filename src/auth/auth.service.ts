@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { CreateUserInput } from './dto/create-user.input';
+import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
 
   generateJwt(user: any): string {
     const payload = { sub: user.id, email: user.email };
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign(payload, { secret: process.env.JWT_SECRET, expiresIn: '1h' });
   }
 
   async findOneByUsernameOrEmail(identifier: string) {
