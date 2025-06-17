@@ -11,7 +11,7 @@ import { RegisterResponse } from './dto/register-response.output';
 export class AuthResolver {
   constructor(private authService: AuthService) {}
 
- @Public()
+  @Public()
   @Mutation(() => RegisterResponse)
   async registerUser(
     @Args('createUserInput') createUserInput: CreateUserInput,
