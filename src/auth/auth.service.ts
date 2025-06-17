@@ -1,17 +1,14 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { CreateUserInput } from './dto/create-user.input';
-import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly httpService: HttpService,
     private readonly jwtService: JwtService,
     @InjectModel(User.name) private userModel: Model<User>
   ) {}
@@ -72,6 +69,7 @@ export class AuthService {
       throw new UnauthorizedException("Credenciales inválidas");
     }
     if (!(await bcrypt.compare(pass, user.password))) {
+
       throw new UnauthorizedException("Contraseña incorrecta");
     }
     
@@ -87,5 +85,4 @@ export class AuthService {
       userId: user._id.toString()
     };
   }
-
 }
